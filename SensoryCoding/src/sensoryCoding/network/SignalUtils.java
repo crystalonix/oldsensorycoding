@@ -4,6 +4,7 @@ import java.io.BufferedWriter;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.Random;
 
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
@@ -114,6 +115,12 @@ public class SignalUtils {
 	 * @return
 	 */
 	public static Signal addTwoSignals(Signal signal1, Signal signal2){
+		if(signal1 == null) {
+			return signal2;
+		}
+		if(signal2 == null) {
+			return signal1;
+		}		
 		int dataLength = signal1.getLength();
 		double start = Math.min(signal1.start, signal2.start);
 		double end = Math.max(signal1.end, signal2.end);
@@ -300,5 +307,20 @@ public class SignalUtils {
 			total += kernelSignal.getSignalValue(t) * inputSignal.getSignalValue(t) * timeStep;
 		}
 		return total;
+	}
+
+	/**
+	 * This method adds random noise to a given signal
+	 * 
+	 * @param signalComp
+	 * @return
+	 */
+	public static Signal addNoiseToSignal(Signal signalPiece, double noiseLevel) {
+		Signal noisySignalPiece = new Signal(signalPiece);
+		for (int i = 0; i < signalPiece.data.length; i++) {
+			noisySignalPiece.data[i] = noisySignalPiece.data[i]
+					+ noisySignalPiece.data[i] * noiseLevel * (new Random().nextDouble() - 0.5);
+		}
+		return noisySignalPiece;
 	}
 }

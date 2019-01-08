@@ -30,7 +30,21 @@ public class Signal {
 		this.end = Math.min(end, getLength() - 1 + timeShift);
 		this.timeShift = timeShift;
 	}
-
+	
+	/**
+	 * Constructor that defensively copies the elements in signal
+	 * @param sig
+	 */
+	public Signal(Signal sig) {
+		
+		this.data = new double[sig.data.length];
+		for(int i=0; i<data.length;i++) {
+			data[i] = sig.data[i];
+		}
+		this.start = sig.start;
+		this.end = sig.end;
+		this.timeShift = sig.timeShift;
+	}
 	// deprecated now
 	// /**
 	// * Returns the signal value at time

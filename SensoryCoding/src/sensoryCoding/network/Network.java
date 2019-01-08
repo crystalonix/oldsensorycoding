@@ -496,13 +496,40 @@ public class Network {
 			return;
 		}
 		System.out.println("number of generated spikes:" + spikeTimings.size());
+		reconstructSignal();
+	}
+	
+	@Deprecated
+	/**
+	 * a stopgap solution added for dealing with reconstruction ignoring certain spikes
+	 */
+	public void removeSpikes(List<Integer> indexestoBeRemoved) {
+		double[][] newConvolvedValues = new double[1][spikeTimings.size() - indexestoBeRemoved.size()];
+		int newArrayIndex = newConvolvedValues[0].length - 1;
+		for (int i = spikeTimings.size() - 1; i >= 0; i--) {
+			if (indexestoBeRemoved.contains(i)) {
+				spikeTimings.remove(i);
+				kernelIndexesForSpikes.remove(i);
+			} else {
+				// populate the threshold matrix
+				newConvolvedValues[0][newArrayIndex] = convoledValues[0][i];
+				newArrayIndex--;
+			}
+		}
+		convolvedValuesMatrix = new SimpleMatrix(newConvolvedValues).transpose();
+	}
+	
+	/**
+	 * Given the spike times reconstruct the signal
+	 * @throws Exception
+	 */
+	public void reconstructSignal() throws Exception {
 		calculatePMatrix();
 		calculateTheCoefficientsOfReconstructedKernel();
 		if(ConfigurationParameters.SHOULD_COLLECT_SPIKE_STATISTICS){
 			populateSpikeStatistics();
 		}
 	}
-
 	private void populateSpikeStatistics() {
 		// TODO Auto-generated method stub
 		double [] sumOfCoefficientsOfReconstructedKernel = new double[ConfigurationParameters.numberOfKernels];
@@ -645,7 +672,7 @@ public class Network {
 		});
 		this.spikeTimings = new ArrayList<>();
 		// this.spikeIndexToKernelIndex = new HashMap<>();
-		double[][] convoledValues = new double[1][spikeTimes.size()];
+		convoledValues = new double[1][spikeTimes.size()];
 		for (int i = 0; i < spikeTimes.size(); i++) {
 			SpikeTimeIndexAndConvolvedValues thisSpike = spikeTimes.get(i);
 			spikeTimings.add(thisSpike.spikeTime);
@@ -653,9 +680,11 @@ public class Network {
 			// spikeIndexToKernelIndex.put(i, thisSpike.kernelIndex);
 			kernelIndexesForSpikes.add(thisSpike.kernelIndex);
 		}
+		
 		convolvedValuesMatrix = new SimpleMatrix(convoledValues).transpose();
 	}
-
+	
+	private double[][] convoledValues;
 	/**
 	 *
 	 * @param convolvedSignal

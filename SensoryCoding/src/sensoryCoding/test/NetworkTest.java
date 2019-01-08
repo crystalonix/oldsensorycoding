@@ -1,5 +1,7 @@
 package sensoryCoding.test;
 
+import static org.junit.Assert.assertTrue;
+
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -10,9 +12,11 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Random;
 
 import org.ejml.simple.SimpleMatrix;
 import org.jfree.data.xy.XYSeries;
+import org.junit.Assert;
 import org.junit.Test;
 
 import com.sun.corba.se.impl.javax.rmi.CORBA.Util;
@@ -1386,6 +1390,105 @@ public class NetworkTest {
 		/**
 		 * Generate a test signal
 		 */
-		Signal testSignal =
+		//Signal testSignal =
+	}
+	@Test 
+	public void testReconstructionWithNoiseOnSignalComp() throws Exception {
+		/**
+		 * parameter selection
+		 */
+		ConfigurationParameters.numberofKernelComponents = 6;
+		ConfigurationParameters.numberOfKernels = 10;
+		ConfigurationParameters.FREQUENCY_SCALING_FACTOR = 1.0 * (1.5 / ConfigurationParameters.numberOfKernels);
+		ConfigurationParameters.lengthOfBasicBSpline = 6;
+		ConfigurationParameters.SHOULD_RANDOMIZE_KERNEL_COEFFICIENTS = true;
+		
+		/**
+		 * network initialization
+		 */
+		Signal blank = null;
+		Network net = new Network(blank);
+		Signal mainSignal = null;
+		
+		
+		
+		int totalShift = 100;
+		int numberOfSignalComps = 3;
+		int kernelIndex = 0;
+		List<Integer> shifts = new ArrayList<>();
+		List<Integer> kernelIndexes = new ArrayList<>();
+		/**
+		 * iteratively add the components to the main signal
+		 */
+		for(int i=0; i<numberOfSignalComps; i++) {
+			shifts.add(totalShift);
+			kernelIndex = new Random().nextInt(ConfigurationParameters.numberOfKernels);
+			kernelIndexes.add(kernelIndex);
+			Signal signalComp = net.kernelMgr.getInvertedKernel(kernelIndex);
+			Signal noisyComp = SignalUtils.addNoiseToSignal(signalComp, 0.05);
+			double compKernelInnerProd = SignalUtils.calculateSignalIntegral(SignalUtils.multiplyTwoSignals(signalComp, noisyComp));
+			// calculate the scale factor now
+			double deltaThres = (ConfigurationParameters.initialThresHoldValue)*1.1;
+			double scaleFactor = 1;
+			if(mainSignal!= null) {
+				double signalKernelInnerProd = SignalUtils.calculateSignalIntegral(SignalUtils.multiplyTwoSignals(mainSignal, SignalUtils.shiftSignal(signalComp, totalShift)));
+				scaleFactor = (deltaThres- signalKernelInnerProd)/compKernelInnerProd;
+			}
+			else {
+				scaleFactor = deltaThres/compKernelInnerProd;
+			}
+			
+			/**
+			 * Scale the component and add it to the signal
+			 */
+			Signal scaledNoisyComp = SignalUtils.scalarMultiply(noisyComp, scaleFactor);		
+			scaledNoisyComp = SignalUtils.shiftSignal(scaledNoisyComp, totalShift);			
+			mainSignal = SignalUtils.addTwoSignals(scaledNoisyComp, mainSignal);			
+			totalShift+= new Random().nextInt(100) +50;
+			
+		}
+		
+		/**
+		 * reconstruct the signal
+		 */
+		net.init(mainSignal);
+		// mainSignal.DrawSignal("mainSignal");
+		// net.kernelMgr.getInvertedKernel(kernelIndex).DrawSignal("kernel");;
+		net.calculateSpikeTimesAndReconstructSignal();
+		List<Double> timings= net.spikeTimings;
+		List<Integer> realKernelIndexes = net.kernelIndexesForSpikes;
+		System.out.println(timings.size());
+		
+		/**
+		 * check for the spurious spike coefficients  
+		 */
+		double[] coefficientsOfRecons = net.coefficientsOfReconstructedSignal;
+		
+		/**
+		 * iterate through all ideal spikes and check for spurious spikes
+		 */
+		List<Integer> spuriousSpikes = new ArrayList<>();
+		for(int i=0,j=0; j<coefficientsOfRecons.length; j++) {
+			double idealSpikeTime=0;
+			if (i < shifts.size()) {
+				idealSpikeTime = shifts.get(i);
+			}
+			double realSpikeTime = timings.get(j);
+			
+			if(i>=shifts.size()||Math.abs(realSpikeTime-idealSpikeTime)>2||kernelIndexes.get(i)!=(int)realKernelIndexes.get(j)) {
+				System.out.println("got a spurious spike here with coeff:"+coefficientsOfRecons[j]);
+				// Assert.assertTrue(coefficientsOfRecons[j]<0.002);
+				spuriousSpikes.add(j);
+				continue;
+			}
+			i++;
+		}
+		double actualErrorRate = net.calculateErrorRate();
+		System.out.println("actual error rate is:"+ actualErrorRate);
+		net.removeSpikes(spuriousSpikes);
+		net.reconstructSignal();
+		double idealErrorRate = net.calculateErrorRate();		
+		System.out.println("ideal error rate is:"+ idealErrorRate);
+		assertTrue(idealErrorRate>=actualErrorRate);
 	}
 }
