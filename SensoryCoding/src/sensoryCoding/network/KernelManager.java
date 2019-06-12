@@ -39,6 +39,10 @@ public class KernelManager {
 	// and another time-shifted kernel component differential signal (always
 	// chooses the 0th component for each kernel)
 	public Signal[][] componentByDiffComponentSignalConvolutionCache;
+	// This stores the length of component b-splines
+	public double[] componentBsplineLengths;
+	// This stores the shifts of component b-splines
+	public double[][] componentBsplineShifts;
 	// component BSpline function without time shift
 	// and without scaling used to generate the kernels
 	private Signal basicBSplineSignal;
@@ -47,16 +51,41 @@ public class KernelManager {
 	private int lengthOfBasicBSpline = ConfigurationParameters.lengthOfBasicBSpline;
 	// kernel calculator used to facilitate kernel related computations
 	public KernelCalculator kernelCalc = null;
+	/**
+	 * stores the squared norm of the bspline edges
+	 */
+	private static final double A_INTEGRAL = 1.0 / 30.0;
+
+	/**
+	 * stores the squared norm of the bspline middle
+	 */
+	private static final double B_INTEGRAL = 3.0 / 20.0;
+	/**
+	 * stores the squared norm of the bspline cross
+	 */
+	private static final double C_INTEGRAL = 1.0 / 180.0;
+
+	/**
+	 * Stores the length of component b-splines of each kernel
+	 */
+	public double[] kernelBsplineLengths = new double[ConfigurationParameters.numberOfKernels];
+
+	/**
+	 * Stores the lengths of each kernels
+	 */
+	public double[] kernelLengths = new double[ConfigurationParameters.numberOfKernels];
 
 	/**
 	 * Constructor for the kernel manager
-	 *
+	 * 
 	 * @param numberOfKernels
 	 * @param numberOfKernelComponents
 	 * @param lengthOfSignal
+	 * @param shouldNormalizeKernels
 	 * @throws Exception
 	 */
-	public KernelManager(int numberOfKernels, int numberOfKernelComponents, int lengthOfSignal) throws Exception {
+	public KernelManager(int numberOfKernels, int numberOfKernelComponents, int lengthOfSignal,
+			boolean shouldNormalizeKernels) throws Exception {
 
 		kernelCalc = new KernelCalculator();
 		kernelCalc.initKernelCalculator();
@@ -66,7 +95,13 @@ public class KernelManager {
 		this.initialThresHoldValue = ConfigurationParameters.initialThresHoldValue;
 		initializeKernelCoefficients();
 		initializeThresholdValues();
+
 		loadBasisComponents();
+
+		if (shouldNormalizeKernels) {
+			normalizeAllKernels(false);
+		}
+
 		loadKernelCache();
 		loadTimeInvertedKernelCache();
 		// TODO: check if we really need kernel differentials and kernel comp
@@ -78,6 +113,29 @@ public class KernelManager {
 		if (ConfigurationParameters.USER_MODE.equals(MODE.DISPLAY_MODE)) {
 			displayKernels();
 		}
+	}
+
+	/**
+	 * Constructor for the kernel manager
+	 * 
+	 * @param numberOfKernels
+	 * @param numberOfKernelComponents
+	 * @param lengthOfSignal
+	 * @throws Exception
+	 */
+	public KernelManager(int numberOfKernels, int numberOfKernelComponents, int lengthOfSignal) throws Exception {
+		this(numberOfKernels, numberOfKernelComponents, lengthOfSignal, true);
+	}
+
+	/**
+	 * Constructor for the kernel manager with default parameters
+	 * 
+	 * @param shouldNormalizeKernels
+	 * @throws Exception
+	 */
+	public KernelManager(boolean shouldNormalizeKernels) throws Exception {
+		this(ConfigurationParameters.numberOfKernels, ConfigurationParameters.numberofKernelComponents,
+				ConfigurationParameters.lengthOfComponentSignals, shouldNormalizeKernels);
 	}
 
 	public void loadTimeInvertedKernelCache() throws Exception {
@@ -98,16 +156,16 @@ public class KernelManager {
 
 	/**
 	 * This method will store all the kernel signals into files
+	 * 
 	 * @param folderPath
 	 * @throws Exception
 	 */
-	public void saveKernelsToFile(String folderPath) throws Exception{
-		for(int i =0 ; i< ConfigurationParameters.numberOfKernels; i++){
+	public void saveKernelsToFile(String folderPath) throws Exception {
+		for (int i = 0; i < ConfigurationParameters.numberOfKernels; i++) {
 			Signal kernelSignal = getKernel(i);
-			SignalUtils.storeSignal(folderPath+"kernel-"+i+".txt", kernelSignal, false);
+			SignalUtils.storeSignal(folderPath + "kernel-" + i + ".txt", kernelSignal, false);
 		}
 	}
-
 
 	public void showBasicBsplines() throws Exception {
 		List<XYSeries> allBSplines = new ArrayList<>();
@@ -119,6 +177,16 @@ public class KernelManager {
 
 	public void initKernelCoefficients(double[][] kernelCoeffs) throws Exception {
 		this.kernelCoefficients = kernelCoeffs;
+		loadKernelCache();
+		loadTimeInvertedKernelCache();
+	}
+
+	/**
+	 * Is invoked every time kernel coefficients are modified
+	 * 
+	 * @throws Exception
+	 */
+	public void updateCache() throws Exception {
 		loadKernelCache();
 		loadTimeInvertedKernelCache();
 	}
@@ -143,7 +211,7 @@ public class KernelManager {
 	/**
 	 * displays the kernels in a chart
 	 */
-	public void displaySelectedKernels(int [] kernelsList) {
+	public void displaySelectedKernels(int[] kernelsList) {
 		XYSeriesCollection kernelDataSet = new XYSeriesCollection();
 		for (int i = 0; i < kernelsList.length; i++) {
 			int kernelIndex = kernelsList[i];
@@ -156,6 +224,7 @@ public class KernelManager {
 		ChartFrame chartFrame = new ChartFrame("plot potentials", linechart);
 		chartFrame.setVisible(true);
 	}
+
 	/**
 	 * displays the kernels in a chart
 	 */
@@ -190,18 +259,26 @@ public class KernelManager {
 	 * This method loads all the basis components of the kernels
 	 */
 	private void loadBasisComponents() {
+		kernelLengths = new double[ConfigurationParameters.numberOfKernels];
+		componentBsplineLengths = new double[ConfigurationParameters.numberOfKernels];
+		componentBsplineShifts = new double[ConfigurationParameters.numberOfKernels][ConfigurationParameters.numberofKernelComponents];
 		basisComponentsCache = new ArrayList<>();
 		for (int i = 0; i < numberOfKernels; i++) {
 			List<Signal> componentSignals = new ArrayList<>();
+			double expansionFactor = 1;
+			if (ConfigurationParameters.NATURE_OF_KERNEL_SPREAD == 1) {
+				expansionFactor = (ConfigurationParameters.FREQUENCY_SCALING_FACTOR * (i) + 1);
+			} else if (ConfigurationParameters.NATURE_OF_KERNEL_SPREAD == 2) {
+				expansionFactor = Math.pow(ConfigurationParameters.FREQUENCY_SCALING_FACTOR, i);
+			}
+			double thisBsplineLength = expansionFactor * lengthOfBasicBSpline;
+			componentBsplineLengths[i] = thisBsplineLength;
+			// put the kernel length into the array
+			kernelBsplineLengths[i] = thisBsplineLength;
+			int shift = 0;
 			for (int j = 0; j < numberOfKernelComponents; j++) {
-				double expansionFactor = 1;
-				if (ConfigurationParameters.NATURE_OF_KERNEL_SPREAD == 1) {
-					expansionFactor = (ConfigurationParameters.FREQUENCY_SCALING_FACTOR * (i) + 1);
-				} else if (ConfigurationParameters.NATURE_OF_KERNEL_SPREAD == 2) {
-					expansionFactor = Math.pow(ConfigurationParameters.FREQUENCY_SCALING_FACTOR, i);
-				}
-				int shift = (int) (((j * lengthOfBasicBSpline) * (1.0 - ConfigurationParameters.OVERLAP_FACTOR))
-						* expansionFactor);
+				shift = (int) ((j * thisBsplineLength) * (1.0 - ConfigurationParameters.OVERLAP_FACTOR));
+				componentBsplineShifts[i][j] = shift;
 				Signal componentSignal = getScaledBasicBSplineSignal(expansionFactor);
 				Signal shiftedSignal = SignalUtils.shiftSignal(componentSignal, shift);
 				// Signal scaledSignal = SignalUtils.scaleSignal(shiftedSignal,
@@ -210,6 +287,7 @@ public class KernelManager {
 				// 1/(i+1));
 				componentSignals.add(shiftedSignal);
 			}
+			kernelLengths[i] = shift + thisBsplineLength;
 			basisComponentsCache.add(componentSignals);
 		}
 	}
@@ -233,8 +311,8 @@ public class KernelManager {
 	}
 
 	/**
-	 * TODO: This need not be stored at its entire length This method
-	 * initializes the threshold values at which each kernel generates a spike
+	 * TODO: This need not be stored at its entire length This method initializes
+	 * the threshold values at which each kernel generates a spike
 	 */
 	private void initializeThresholdValues() {
 		thresholdValues = new double[numberOfKernels][lengthOfSignal];
@@ -246,8 +324,8 @@ public class KernelManager {
 	}
 
 	/**
-	 * This method initializes the kernel manager with required number of
-	 * kernels and kernel components and individual time shifts and so on
+	 * This method initializes the kernel manager with required number of kernels
+	 * and kernel components and individual time shifts and so on
 	 */
 	public void initializeKernelCoefficients() {
 		kernelCoefficients = new double[numberOfKernels][numberOfKernelComponents];
@@ -274,14 +352,12 @@ public class KernelManager {
 	}
 
 	/**
-	 * Given the index of the kernel this method returns the value of the kernel
-	 * at a particular instant of time
+	 * Given the index of the kernel this method returns the value of the kernel at
+	 * a particular instant of time
 	 *
-	 * @param time
-	 *            at which we want to calculate the value of the kernel
-	 * @param kernelIndex
-	 *            index of the kernel whose value we want to calculate, it
-	 *            starts with 0
+	 * @param time        at which we want to calculate the value of the kernel
+	 * @param kernelIndex index of the kernel whose value we want to calculate, it
+	 *                    starts with 0
 	 * @return
 	 * @throws Exception
 	 */
@@ -300,8 +376,8 @@ public class KernelManager {
 	}
 
 	/**
-	 * returns the value of the basis function corresponding to a kernel comp.
-	 * at a given time instant
+	 * returns the value of the basis function corresponding to a kernel comp. at a
+	 * given time instant
 	 *
 	 * @param t
 	 * @param thisKernelIndex
@@ -348,8 +424,8 @@ public class KernelManager {
 	}
 
 	/**
-	 * returns the component BSpline signal without time shift and without
-	 * scaling used to generate the kernels
+	 * returns the component BSpline signal without time shift and without scaling
+	 * used to generate the kernels
 	 *
 	 * @return
 	 */
@@ -369,8 +445,7 @@ public class KernelManager {
 	/**
 	 * Returns the scaled basic BSpline
 	 *
-	 * @param alpha
-	 *            factor by which the BSpline is expanded
+	 * @param alpha factor by which the BSpline is expanded
 	 * @return scaled version of the BSpline signal
 	 */
 	public Signal getScaledBasicBSplineSignal(double alpha) {
@@ -384,8 +459,7 @@ public class KernelManager {
 	}
 
 	/**
-	 * returns the basis function corresponding to a kernel comp. as a signal
-	 * array
+	 * returns the basis function corresponding to a kernel comp. as a signal array
 	 *
 	 * @param thisKernelIndex
 	 * @param thisKernelComponent
@@ -406,8 +480,7 @@ public class KernelManager {
 	}
 
 	/**
-	 * returns the basis function corresponding to a kernel comp. as a signal
-	 * array
+	 * returns the basis function corresponding to a kernel comp. as a signal array
 	 *
 	 * @param thisKernelIndex
 	 * @param thisKernelComponent
@@ -479,21 +552,15 @@ public class KernelManager {
 	}
 
 	/**
-	 * This function returns the multiplication of two time shifted kernel
-	 * component values
+	 * This function returns the multiplication of two time shifted kernel component
+	 * values
 	 *
-	 * @param kernelIndex1
-	 *            index of the first kernel
-	 * @param kernelIndex2
-	 *            index of the second kernel
-	 * @param compIndex1
-	 *            index of the first component
-	 * @param compIndex2
-	 *            index of the second component
-	 * @param timeShift1
-	 *            shift of the first signal
-	 * @param timeShift2
-	 *            shift of the second signal
+	 * @param kernelIndex1 index of the first kernel
+	 * @param kernelIndex2 index of the second kernel
+	 * @param compIndex1   index of the first component
+	 * @param compIndex2   index of the second component
+	 * @param timeShift1   shift of the first signal
+	 * @param timeShift2   shift of the second signal
 	 * @return the integration of the multiplied signal
 	 * @throws Exception
 	 */
@@ -560,9 +627,8 @@ public class KernelManager {
 					/***** old version *****/
 					/**********************/
 					/*
-					 * Signal shiftedSignal = SignalUtils.shiftSignal(sigj,
-					 * delta); Signal multipliedSignal =
-					 * SignalUtils.multiplyTwoSignals(sigi, shiftedSignal);
+					 * Signal shiftedSignal = SignalUtils.shiftSignal(sigj, delta); Signal
+					 * multipliedSignal = SignalUtils.multiplyTwoSignals(sigi, shiftedSignal);
 					 * innerproducts[delta + e2] =
 					 * SignalUtils.calculateSignalIntegral(multipliedSignal);
 					 */
@@ -574,8 +640,8 @@ public class KernelManager {
 	}
 
 	/**
-	 * TODO: check if all the calculations here are correct This method
-	 * populates the ComponentByComponentSignalConvolution cache
+	 * TODO: check if all the calculations here are correct This method populates
+	 * the ComponentByComponentSignalConvolution cache
 	 *
 	 * @throws Exception
 	 */
@@ -597,9 +663,8 @@ public class KernelManager {
 					/***** old version *****/
 					/**********************/
 					/*
-					 * Signal shiftedSignal = SignalUtils.shiftSignal(sigj,
-					 * delta); Signal multipliedSignal =
-					 * SignalUtils.multiplyTwoSignals(sigi, shiftedSignal);
+					 * Signal shiftedSignal = SignalUtils.shiftSignal(sigj, delta); Signal
+					 * multipliedSignal = SignalUtils.multiplyTwoSignals(sigi, shiftedSignal);
 					 * innerproducts[delta + e2] =
 					 * SignalUtils.calculateSignalIntegral(multipliedSignal);
 					 */
@@ -646,8 +711,8 @@ public class KernelManager {
 	}
 
 	/**
-	 * This method increments the value of a particular kernel coefficient after
-	 * a gradient step has been taken
+	 * This method increments the value of a particular kernel coefficient after a
+	 * gradient step has been taken
 	 *
 	 * @param kernelIndex
 	 * @param coefficientIndex
@@ -659,8 +724,8 @@ public class KernelManager {
 	}
 
 	/**
-	 * This method updates each kernel coefficient by the amount given in the
-	 * 2-D array
+	 * This method updates each kernel coefficient by the amount given in the 2-D
+	 * array
 	 *
 	 * @param updateOnKernelCoeffs
 	 */
@@ -686,5 +751,99 @@ public class KernelManager {
 				kernelCoefficients[i][j] -= updateOnKernelCoeffs[i][j];
 			}
 		}
+	}
+
+	/**
+	 * This method normalizes all the kernels to give them a unit l2 norm
+	 * 
+	 * @param shouldUpdateCache
+	 * @throws Exception
+	 */
+	public void normalizeAllKernels(boolean shouldUpdateCache) throws Exception {
+		for (int i = 0; i < ConfigurationParameters.numberOfKernels; i++) {
+			normalizeKernel(i, false);
+		}
+		if(shouldUpdateCache) {
+			updateCache();
+		}
+	}
+
+	/**
+	 * This method normalizes a kernel
+	 * 
+	 * @param index of the kernel
+	 * @throws Exception
+	 */
+	public void normalizeKernel(int index, boolean shouldUpdateCache) throws Exception {
+		double bSquares = 0;
+		double bCrossSquares = 0;
+		for (int i = 0; i < ConfigurationParameters.numberofKernelComponents; i++) {
+			bSquares += kernelCoefficients[index][i] * kernelCoefficients[index][i];
+			if (i != 0) {
+				bCrossSquares += kernelCoefficients[index][i] * kernelCoefficients[index][i - 1];
+			}
+		}
+		double kernelNorm = Math.sqrt(
+				((A_INTEGRAL + B_INTEGRAL) * bSquares + (C_INTEGRAL) * bCrossSquares) * kernelBsplineLengths[index]);
+		for (int i = 0; i < ConfigurationParameters.numberofKernelComponents; i++) {
+			kernelCoefficients[index][i] /= kernelNorm;
+		}
+		if (shouldUpdateCache) {
+			updateCache();
+		}
+	}
+
+	/**
+	 * Returns the normalized gradient for the kernel norm constraint
+	 * 
+	 * @param kernelIndex
+	 * @return
+	 */
+	public double[] getGradGNormalized(int kernelIndex) {
+		double[] gradG = new double[ConfigurationParameters.numberofKernelComponents];
+		for (int i = 0; i < ConfigurationParameters.numberofKernelComponents; i++) {
+			gradG[i] = (2 * (A_INTEGRAL + B_INTEGRAL) * kernelCoefficients[kernelIndex][i]);
+			if (i > 0) {
+				gradG[i] += (2 * (C_INTEGRAL) * kernelCoefficients[kernelIndex][i - 1]);
+			}
+			if (i + 1 < ConfigurationParameters.numberofKernelComponents) {
+				gradG[i] += (2 * (C_INTEGRAL) * kernelCoefficients[kernelIndex][i + 1]);
+			}
+		}
+		gradG = Utilities.normalizeVector(gradG);
+		return gradG;// fix this has a bug due to wrong kernel norm condition
+	}
+
+	/**
+	 * Projects the kernel gradient on the surface of the kernel constraint
+	 * 
+	 * @param kernelIndex
+	 * @param deltas
+	 * @return returns the delta step projected onto the constraint surface
+	 */
+	public double[] projectAlongKernelConstraint(int kernelIndex, double[] deltas) {
+		double[] kernelGGradNormalized = getGradGNormalized(kernelIndex);
+		double innerProductWthGradient = Utilities.vectorInnerProduct(deltas, kernelGGradNormalized);
+		kernelGGradNormalized = Utilities.scaleVector(-innerProductWthGradient, kernelGGradNormalized);
+		kernelGGradNormalized = Utilities.addTwoVectors(kernelGGradNormalized, deltas);
+		return kernelGGradNormalized;
+	}
+
+	/**
+	 * Given a gradient vector this method gives its projection along the kernel
+	 * constraint surface
+	 * 
+	 * @param gradient
+	 * @return
+	 */
+	public double[][] getGradientAlongKernelConstraints(double[][] gradient) {
+		if (gradient.length != numberOfKernels) {
+			throw new IllegalArgumentException("Not sufficient arguments provided in gradient update");
+		}
+		double[][] projectedGradient = new double[numberOfKernels][];
+		for (int i = 0; i < numberOfKernels; i++) {
+			projectedGradient[i] = projectAlongKernelConstraint(i, gradient[i]);
+		}
+		return projectedGradient;
 	}
 }

@@ -102,7 +102,7 @@ public class KernelCalculator {
 	/**
 	 * This 2-D array stores the basic b-spline components of the kernel signals
 	 */
-	private double[][] basicExpandedComponentBSplines;
+	public double[][] basicExpandedComponentBSplines;
 
 	public void initKernelCalculator(){
 		basicExpandedComponentBSplines = new double[ConfigurationParameters.numberOfKernels][];

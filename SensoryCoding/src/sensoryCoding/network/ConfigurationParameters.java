@@ -42,13 +42,19 @@ public class ConfigurationParameters {
 	public static double initialCoefficientValue = 1;
 	// This denotes the value at which the threshold for each spike generation is
 	// initially set to
-	public static double initialThresHoldValue = 0.01;
+	public static double initialThresHoldValue = 0.1;
 	// rate at which the coefficients need to be updated
 	public static double INITIAL_LEARNING_RATE = 0.001;
 	// this specifies the threshold value of the gradient vector length beyond which we tune the gradient values
 	public static double INITIAL_THRESHOLD_GRADIENT_STEP_LENGTH = 0.01;
+	// this is high value at which the threshold is kicked up when a spike occurs 
+	public static double AHP_HIGH_VALUE = 1000.0;
+	// refractory period within which the threshold comes down to its original value
+	public static double AHP_REFRACTORY_PERIOD = 50.0;
+	// stores the positive slope of the ahp graph
+	public static double AHP_SLOPE = AHP_HIGH_VALUE/AHP_REFRACTORY_PERIOD;
 	// constant factor with which the ahp function is multiplied with
-	public static int AHP_CONSTANT = 10000;
+	public static int AHP_CONSTANT = 10;
 	// time constant for ahp function
 	public static double TIME_CONSTANT = 1.5*44.1;
 	/*******************************/

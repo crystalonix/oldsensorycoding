@@ -31,7 +31,8 @@ public class Utilities {
 		chartFrame.setVisible(true);
 	}
 
-	public static void saveSetOfSignalsToFile(String fileName, List<XYSeries> allSignalData, String title, String xLabel, String yLabel) {
+	public static void saveSetOfSignalsToFile(String fileName, List<XYSeries> allSignalData, String title,
+			String xLabel, String yLabel) {
 		XYSeriesCollection signalData = new XYSeriesCollection();
 		for (XYSeries xySeries : allSignalData) {
 			signalData.addSeries(xySeries);
@@ -77,7 +78,7 @@ public class Utilities {
 	 * @param scalingFactor
 	 * @return
 	 */
-	public static double[][] scale(double[][] arrayFromMatrix, int scalingFactor) {
+	public static double[][] scale(double[][] arrayFromMatrix, double scalingFactor) {
 		double[][] result = new double[arrayFromMatrix.length][arrayFromMatrix[0].length];
 		for (int i = 0; i < arrayFromMatrix.length; i++) {
 			for (int j = 0; j < arrayFromMatrix[0].length; j++) {
@@ -194,19 +195,16 @@ public class Utilities {
 	/**
 	 * This method writes matrix into a log file
 	 *
-	 * @param title
-	 *            title for the log
-	 * @param logFileName
-	 *            name of the log file
-	 * @param matrix
-	 *            input matrix
+	 * @param title       title for the log
+	 * @param logFileName name of the log file
+	 * @param matrix      input matrix
 	 */
 	public static void writeMatrixToFile(String title, String logFileName, double[][] matrix) {
 		FileWriter fw = null;
 		BufferedWriter bw = null;
 		try {
 			StringBuilder sb = new StringBuilder();
-			//sb.append(title).append("\n");
+			// sb.append(title).append("\n");
 			sb.append(Integer.toString(matrix.length)).append("\n");
 			sb.append(Integer.toString(matrix[0].length)).append("\n");
 			for (int i = 0; i < matrix.length; i++) {
@@ -216,6 +214,40 @@ public class Utilities {
 				sb.append("\n");
 			}
 			fw = new FileWriter(logFileName);
+			bw = new BufferedWriter(fw);
+			bw.write(sb.toString());
+		} catch (IOException e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				if (bw != null)
+					bw.close();
+				if (fw != null)
+					fw.close();
+			} catch (IOException ex) {
+				ex.printStackTrace();
+			}
+		}
+	}
+
+	/**
+	 * Writes a matrix into a file without putting any header
+	 * 
+	 * @param fileName
+	 * @param matrix
+	 */
+	public static void writeMatrixToFileWithoutAnyHeader(String fileName, double[][] matrix) {
+		FileWriter fw = null;
+		BufferedWriter bw = null;
+		try {
+			StringBuilder sb = new StringBuilder();
+			for (int i = 0; i < matrix.length; i++) {
+				for (int j = 0; j < matrix[0].length; j++) {
+					sb.append(matrix[i][j]).append(", ");
+				}
+				sb.append("\n");
+			}
+			fw = new FileWriter(fileName);
 			bw = new BufferedWriter(fw);
 			bw.write(sb.toString());
 		} catch (IOException e) {
@@ -269,7 +301,7 @@ public class Utilities {
 		double[][] kernelCoefficients = new double[rows][cols];
 		for (int i = 0; i < rows; i++) {
 			String rowNumbers = br.readLine();
-			String []numbers = rowNumbers.split(",");
+			String[] numbers = rowNumbers.split(",");
 			for (int j = 0; j < cols; j++) {
 				double value = Double.parseDouble(numbers[j]);
 				kernelCoefficients[i][j] = value;
@@ -286,6 +318,7 @@ public class Utilities {
 
 		}
 	}
+
 	public static void writeListToBufferedWriter(BufferedWriter bw, double[] errorValues) throws IOException {
 		// TODO Auto-generated method stub
 		for (int i = 0; i < errorValues.length; i++) {
@@ -294,6 +327,7 @@ public class Utilities {
 
 		}
 	}
+
 	public static void writeIntegerListToBufferedWriter(BufferedWriter bw, List<Integer> spikeCounts)
 			throws IOException {
 		// TODO Auto-generated method stub
@@ -304,8 +338,7 @@ public class Utilities {
 		}
 	}
 
-	public static void writeIntegerListToBufferedWriter(BufferedWriter bw, int[] spikeCounts)
-			throws IOException {
+	public static void writeIntegerListToBufferedWriter(BufferedWriter bw, int[] spikeCounts) throws IOException {
 		// TODO Auto-generated method stub
 		for (int i = 0; i < spikeCounts.length; i++) {
 			bw.write(Integer.toString(spikeCounts[i]));
@@ -324,24 +357,24 @@ public class Utilities {
 
 	/**
 	 * This method returns the moving average of a given list of values
+	 * 
 	 * @param values
 	 * @return
 	 */
-	public static List<Double> convertToMovingErrorAverage(List<Double> values, boolean skipNoReconstructions){
+	public static List<Double> convertToMovingErrorAverage(List<Double> values, boolean skipNoReconstructions) {
 		List<Double> movingAvgs = new ArrayList<>();
-		for(int i=0; i< values.size(); i++){
+		for (int i = 0; i < values.size(); i++) {
 			int len = movingAvgs.size();
-			if(values.get(i)<=0){
+			if (values.get(i) <= 0) {
 				continue;
 			}
-			if(values.get(i)>=1 && skipNoReconstructions){
+			if (values.get(i) >= 1 && skipNoReconstructions) {
 				continue;
 			}
-			if(len==0){
+			if (len == 0) {
 				movingAvgs.add(values.get(i));
-			}
-			else{
-				movingAvgs.add((movingAvgs.get(len-1)*len+values.get(i))/(len+1));
+			} else {
+				movingAvgs.add((movingAvgs.get(len - 1) * len + values.get(i)) / (len + 1));
 			}
 		}
 		return movingAvgs;
@@ -349,23 +382,157 @@ public class Utilities {
 
 	/**
 	 * This method returns the moving average of a given list of values
+	 * 
 	 * @param values
 	 * @return
 	 */
-	public static List<Double> convertToMovingSpikeCountAverage(List<Double> values, boolean shouldSkipZeros){
+	public static List<Double> convertToMovingSpikeCountAverage(List<Double> values, boolean shouldSkipZeros) {
 		List<Double> movingAvgs = new ArrayList<>();
-		for(int i=0; i< values.size(); i++){
+		for (int i = 0; i < values.size(); i++) {
 			int len = movingAvgs.size();
-			if(values.get(i)<=0/* && values.get(i)>=1*/ && shouldSkipZeros){
+			if (values.get(i) <= 0/* && values.get(i)>=1 */ && shouldSkipZeros) {
 				continue;
 			}
-			if(len==0){
+			if (len == 0) {
 				movingAvgs.add(values.get(i));
-			}
-			else{
-				movingAvgs.add((movingAvgs.get(len-1)*len+values.get(i))/(len+1));
+			} else {
+				movingAvgs.add((movingAvgs.get(len - 1) * len + values.get(i)) / (len + 1));
 			}
 		}
 		return movingAvgs;
+	}
+
+	/**
+	 * Displays a set of signals with time bounds unspecified
+	 * 
+	 * @param signals
+	 * @param title
+	 */
+	public static void displaySetOfSignals(Signal[] signals, String title) {
+		List<XYSeries> allSignals = new ArrayList<>();
+		for (int i = 0; i < signals.length; i++) {
+			allSignals.add(signals[i].getSignalDisplayData("Signal#:" + i));
+		}
+		if (title == null) {
+			title = "set of signals";
+		}
+		Utilities.displaySetOfSignals(allSignals, title, "time", "value");
+	}
+
+	/**
+	 * Displays a set of signals with time bounds specified
+	 * 
+	 * @param signals
+	 * @param title
+	 * @param start
+	 * @param end
+	 */
+	public static void displaySetOfSignals(Signal[] signals, String title, int start, int end) {
+		List<XYSeries> allSignals = new ArrayList<>();
+		for (int i = 0; i < signals.length; i++) {
+			allSignals.add(signals[i].getSignalDisplayData("Signal#:" + i, start, end));
+		}
+		if (title == null) {
+			title = "set of signals";
+		}
+		Utilities.displaySetOfSignals(allSignals, title, "time", "value");
+	}
+
+	/**
+	 * Normalizes a given vector; changes the original content
+	 * 
+	 * @param gradG
+	 * @return
+	 */
+	public static double[] normalizeVector(double[] vec) {
+		double result[] = new double[vec.length];
+		double norm = calculateVectorNorm(vec);
+		for (int i = 0; i < vec.length; i++) {
+			result[i] = vec[i] / norm;
+		}
+		return result;
+	}
+
+	/**
+	 * This method computes the norm a given vector
+	 * 
+	 * @param vec
+	 * @return
+	 */
+	public static double calculateVectorNorm(double[] vec) {
+		double norm = 0;
+		for (int i = 0; i < vec.length; i++) {
+			norm += vec[i] * vec[i];
+		}
+		return Math.sqrt(norm);
+	}
+
+	/**
+	 * Returns the inner product of two vectors
+	 * 
+	 * @param deltas
+	 * @param kernelGGradNormalized
+	 * @return
+	 */
+	public static double vectorInnerProduct(double[] vec1, double[] vec2) {
+		// TODO Auto-generated method stub
+		double ip = 0;
+		if (vec1.length != vec2.length) {
+			throw new IllegalArgumentException("Vector lengths must match");
+		}
+		for (int i = 0; i < vec1.length; i++) {
+			ip += vec1[i] * vec2[i];
+		}
+		return ip;
+	}
+
+	/**
+	 * scales a vector with scalar with defensive copy
+	 * 
+	 * @param d
+	 * @param deltas
+	 * @return
+	 */
+	public static double[] scaleVector(double d, double[] vec) {
+		// TODO Auto-generated method stub
+		double result[] = new double[vec.length];
+		for (int i = 0; i < vec.length; i++) {
+			result[i] = vec[i] * d;
+		}
+		return result;
+	}
+
+	/**
+	 * Adds two vectors with defensive copy
+	 * 
+	 * @param kernelGGradNormalized
+	 * @param deltas
+	 * @return
+	 */
+	public static double[] addTwoVectors(double[] vec1, double[] vec2) {
+		if (vec1.length != vec2.length) {
+			throw new IllegalArgumentException("Vector lengths must match");
+		}
+		double result[] = new double[vec1.length];
+		for (int i = 0; i < vec1.length; i++) {
+			result[i] = vec1[i] + vec2[i];
+		}
+		return result;
+	}
+
+	/**
+	 * Returns the Frobenius Norm of the matrix
+	 * 
+	 * @param errorGrads
+	 * @return
+	 */
+	public static double calculateMatrixNormSquare(double[][] errorGrads) {
+		double normSq = 0;
+		for (int i = 0; i < errorGrads.length; i++) {
+			for (int j = 0; j < errorGrads[0].length; j++) {
+				normSq += errorGrads[i][j] * errorGrads[i][j];
+			}
+		}
+		return normSq;
 	}
 }
