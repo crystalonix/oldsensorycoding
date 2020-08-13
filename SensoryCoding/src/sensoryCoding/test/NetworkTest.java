@@ -4,8 +4,6 @@ import static org.junit.Assert.assertTrue;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -19,19 +17,14 @@ import org.jfree.data.xy.XYSeries;
 import org.junit.Assert;
 import org.junit.Test;
 
-import com.sun.corba.se.impl.javax.rmi.CORBA.Util;
-
-import jdk.nashorn.internal.runtime.regexp.joni.Config;
 import sensoryCoding.network.ConfigurationParameters;
 import sensoryCoding.network.DataReader;
 import sensoryCoding.network.DebugConfigurationParameters;
-import sensoryCoding.network.KernelCalculator;
 import sensoryCoding.network.KernelManager;
 import sensoryCoding.network.Network;
 import sensoryCoding.network.Signal;
 import sensoryCoding.network.SignalUtils;
 import sensoryCoding.network.Utilities;
-import sun.nio.ch.Net;
 
 public class NetworkTest {
 	@Test
@@ -443,51 +436,51 @@ public class NetworkTest {
 		System.out.println();
 		// Utilities.outputMatrix(pmat);
 	}
-
-	@Test
-	public void pinvTest() throws Exception {
-		int kernelIndex = 0;
-		int compIndex = 0;
-		double eps = 0.005;
-		KernelManager kernelMgr = new KernelManager(ConfigurationParameters.numberOfKernels,
-				ConfigurationParameters.numberofKernelComponents, ConfigurationParameters.lengthOfComponentSignals);
-		Signal kernelSignal = getKernelSignal();
-		Network nt = new Network(kernelSignal);
-		/************************/
-		/******* first run *****/
-		/***********************/
-		nt.calculateSpikeTimesAndReconstructSignal();
-		nt.calculateErrorGradient();
-		SimpleMatrix mat = (nt.pInvMatrix).mult(new SimpleMatrix(nt.pMatrix));
-		double oldInv[][] = Utilities.getArrayFromMatrix(nt.pInvMatrix);
-		Utilities.outputMatrix(Utilities.getArrayFromMatrix(nt.pInvMatrix));
-		// Utilities.outputMatrix(matrix);
-		// Utilities.outputMatrix(Utilities.getArrayFromMatrix(mat));
-		System.out.println("++++++++++++++++++++++++++++++++++++++++++");
-
-		/************************/
-		/******* second run ******/
-		/***********************/
-		nt.init(kernelSignal);
-		nt.kernelMgr.kernelCoefficients[kernelIndex][compIndex] += eps;
-		nt.kernelMgr.loadKernelCache();
-		nt.calculateSpikeTimesAndReconstructSignal();
-		mat = (nt.pInvMatrix).mult(new SimpleMatrix(nt.pMatrix));
-		Utilities.outputMatrix(Utilities.getArrayFromMatrix(nt.pInvMatrix));
-		double newInv[][] = Utilities.getArrayFromMatrix(nt.pInvMatrix);
-		System.out.println("++++++++++++++++++++++++++++++++++++++++++");
-		for (int i = 0; i < newInv.length; i++) {
-			for (int j = 0; j < newInv[0].length; j++) {
-				if ((newInv[i][j] == 0 && oldInv[i][j] == 0)
-						|| Math.abs((newInv[i][j] - oldInv[i][j]) / newInv[i][j]) < 0.1) {
-				} // System.out.println("0");
-				else {
-					System.out.println(
-							"entry" + i + "," + j + ":" + Math.abs((newInv[i][j] - oldInv[i][j]) / newInv[i][j]));
-				}
-			}
-		}
-	}
+	
+//	@Test
+//	public void pinvTest() throws Exception {
+//		int kernelIndex = 0;
+//		int compIndex = 0;
+//		double eps = 0.005;
+//		KernelManager kernelMgr = new KernelManager(ConfigurationParameters.numberOfKernels,
+//				ConfigurationParameters.numberofKernelComponents, ConfigurationParameters.lengthOfComponentSignals);
+//		Signal kernelSignal = getKernelSignal();
+//		Network nt = new Network(kernelSignal);
+//		/************************/
+//		/******* first run *****/
+//		/***********************/
+//		nt.calculateSpikeTimesAndReconstructSignal();
+//		nt.calculateErrorGradient();
+//		SimpleMatrix mat = (nt.pInvMatrix).mult(new SimpleMatrix(nt.pMatrix));
+//		double oldInv[][] = Utilities.getArrayFromMatrix(nt.pInvMatrix);
+//		Utilities.outputMatrix(Utilities.getArrayFromMatrix(nt.pInvMatrix));
+//		// Utilities.outputMatrix(matrix);
+//		// Utilities.outputMatrix(Utilities.getArrayFromMatrix(mat));
+//		System.out.println("++++++++++++++++++++++++++++++++++++++++++");
+//
+//		/************************/
+//		/******* second run ******/
+//		/***********************/
+//		nt.init(kernelSignal);
+//		nt.kernelMgr.kernelCoefficients[kernelIndex][compIndex] += eps;
+//		nt.kernelMgr.loadKernelCache();
+//		nt.calculateSpikeTimesAndReconstructSignal();
+//		mat = (nt.pInvMatrix).mult(new SimpleMatrix(nt.pMatrix));
+//		Utilities.outputMatrix(Utilities.getArrayFromMatrix(nt.pInvMatrix));
+//		double newInv[][] = Utilities.getArrayFromMatrix(nt.pInvMatrix);
+//		System.out.println("++++++++++++++++++++++++++++++++++++++++++");
+//		for (int i = 0; i < newInv.length; i++) {
+//			for (int j = 0; j < newInv[0].length; j++) {
+//				if ((newInv[i][j] == 0 && oldInv[i][j] == 0)
+//						|| Math.abs((newInv[i][j] - oldInv[i][j]) / newInv[i][j]) < 0.1) {
+//				} // System.out.println("0");
+//				else {
+//					System.out.println(
+//							"entry" + i + "," + j + ":" + Math.abs((newInv[i][j] - oldInv[i][j]) / newInv[i][j]));
+//				}
+//			}
+//		}
+//	}
 
 	/*
 	 * @Test public void checkAlphas() throws Exception { // TODO: next check for
@@ -1178,10 +1171,10 @@ public class NetworkTest {
 	@Test
 	public void testWriting() throws IOException {
 		List<Double> errorRates = Arrays.asList(new Double[] { 1.0, 2.0, 3.0, 4.0 });
-		String fileName = "C:/Users/crystalonix/Downloads/compNeuroScience/researchProj/sensoryCodingWithPreciseSpikeTime/SensoryCoding (2)/SensoryCoding/src/sensoryCoding/stepOutPut/anikTest.txt";
+		String fileName = "C:/Users/crystalonix/Downloads/compNeuroScience/researchProj/sensoryCodingWithPreciseSpikeTime/SensoryCoding (2)/SensoryCoding/src/sensoryCoding/stepOutPut/anonymousTest.txt";
 		FileWriter fw1 = new FileWriter(fileName, true);
 		// FileWriter fw2 = new FileWriter(ConfigurationParameters.spikeCountFileName +
-		// "anikTest.txt", true);
+		// "anonymousTest.txt", true);
 		BufferedWriter bw1 = new BufferedWriter(fw1);
 		Utilities.writeListToBufferedWriter(bw1, errorRates);
 
@@ -1193,7 +1186,7 @@ public class NetworkTest {
 		errorRates = Arrays.asList(new Double[] { 10.0, 20.0, 30.0, 4.0 });
 		fw1 = new FileWriter(fileName, true);
 		// FileWriter fw2 = new FileWriter(ConfigurationParameters.spikeCountFileName +
-		// "anikTest.txt", true);
+		// "anonymousTest.txt", true);
 		bw1 = new BufferedWriter(fw1);
 		Utilities.writeListToBufferedWriter(bw1, errorRates);
 

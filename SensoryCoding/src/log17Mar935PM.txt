@@ -1,0 +1,432 @@
+JUnit version 4.11
+.Experimenting with signal number#1
+Size of the data set is: 617400
+cf:172.8973101753005 kernel length:16506
+Number of spikes:17804
+The avg evaluation error is:1.21845121813941
+Error Rate:5.887919050027288E-4
+The entire loop took:1502452.0
+Experimenting with signal number#2
+Size of the data set is: 455112
+cf:172.8973101753005 kernel length:16506
+Number of spikes:14459
+The avg evaluation error is:0.0026438296371585545
+Error Rate:2.2498298367780353E-4
+The entire loop took:939578.0
+Experimenting with signal number#3
+Size of the data set is: 19404
+cf:172.8973101753005 kernel length:16506
+Number of spikes:15021
+The avg evaluation error is:0.0031126530566340286
+Error Rate:3.856247997013986E-4
+The entire loop took:1044765.0
+Experimenting with signal number#4
+Size of the data set is: 352800
+cf:172.8973101753005 kernel length:16506
+Number of spikes:16933
+The avg evaluation error is:0.1150520497298536
+Error Rate:2.2380293183554676E-4
+The entire loop took:1370910.0
+Experimenting with signal number#5
+Size of the data set is: 199332
+cf:172.8973101753005 kernel length:16506
+Number of spikes:17051
+The avg evaluation error is:0.07275975939631163
+Error Rate:0.0019079360202096216
+The entire loop took:1404358.0
+Experimenting with signal number#6
+Size of the data set is: 585648
+cf:172.8973101753005 kernel length:16506
+Number of spikes:15546
+The avg evaluation error is:0.003086173937790347
+Error Rate:1.1848880887609744E-4
+The entire loop took:1354020.0
+Experimenting with signal number#7
+Size of the data set is: 59976
+cf:172.8973101753005 kernel length:16506
+Number of spikes:11078
+The avg evaluation error is:0.0030218240251416615
+Error Rate:0.00816253885326384
+The entire loop took:535741.0
+Experimenting with signal number#8
+Size of the data set is: 45864
+cf:172.8973101753005 kernel length:16506
+Number of spikes:14678
+The avg evaluation error is:0.003208523540333624
+Error Rate:5.549927639419773E-4
+The entire loop took:1043112.0
+Experimenting with signal number#9
+Size of the data set is: 308700
+cf:172.8973101753005 kernel length:16506
+Number of spikes:13795
+The avg evaluation error is:0.008391294115139097
+Error Rate:0.006448445464789508
+The entire loop took:927423.0
+Experimenting with signal number#10
+Size of the data set is: 1307124
+cf:172.8973101753005 kernel length:16506
+Number of spikes:10393
+The avg evaluation error is:0.0034850519181309574
+Error Rate:0.009080343899872983
+The entire loop took:451781.0
+Experimenting with signal number#11
+Size of the data set is: 74088
+cf:172.8973101753005 kernel length:16506
+Number of spikes:17307
+The avg evaluation error is:2.9352145751246765
+Error Rate:0.0039798415648155195
+The entire loop took:1498577.0
+Experimenting with signal number#12
+Size of the data set is: 910224
+cf:172.8973101753005 kernel length:16506
+Number of spikes:12101
+The avg evaluation error is:0.0020962222976113622
+Error Rate:0.0027398289779027403
+The entire loop took:623406.0
+Experimenting with signal number#13
+Size of the data set is: 49392
+cf:172.8973101753005 kernel length:16506
+Number of spikes:17683
+The avg evaluation error is:0.8393935860378673
+Error Rate:2.0109904081682412E-4
+The entire loop took:1455717.0
+Experimenting with signal number#14
+Size of the data set is: 179046
+cf:172.8973101753005 kernel length:16506
+Number of spikes:11119
+The avg evaluation error is:0.0018440582991906972
+Error Rate:0.0025122270112655732
+The entire loop took:520096.0
+Experimenting with signal number#15
+Size of the data set is: 251370
+cf:172.8973101753005 kernel length:16506
+Number of spikes:15294
+The avg evaluation error is:0.004224629236773734
+Error Rate:3.6995737512238495E-4
+The entire loop took:1035282.0
+Experimenting with signal number#16
+Size of the data set is: 116424
+cf:172.8973101753005 kernel length:16506
+Number of spikes:12000
+The avg evaluation error is:0.0014270099866758193
+Error Rate:6.322823301836216E-4
+The entire loop took:627585.0
+Experimenting with signal number#17
+Size of the data set is: 191394
+cf:172.8973101753005 kernel length:16506
+Number of spikes:13383
+The avg evaluation error is:0.0035072531420606633
+Error Rate:0.0021350702521820645
+The entire loop took:778263.0
+Experimenting with signal number#18
+Size of the data set is: 684432
+cf:172.8973101753005 kernel length:16506
+Number of spikes:16882
+The avg evaluation error is:0.02113857143857382
+Error Rate:5.701245122643612E-4
+The entire loop took:1384333.0
+Experimenting with signal number#19
+Size of the data set is: 68796
+cf:172.8973101753005 kernel length:16506
+Number of spikes:16948
+The avg evaluation error is:0.07465513782902534
+Error Rate:9.869471547608287E-4
+The entire loop took:1353309.0
+Experimenting with signal number#20
+Size of the data set is: 110250
+cf:172.8973101753005 kernel length:16506
+Number of spikes:16144
+The avg evaluation error is:0.0028240208971773576
+Error Rate:2.9319746324032797E-4
+The entire loop took:1160241.0
+Experimenting with signal number#21
+Size of the data set is: 92610
+cf:172.8973101753005 kernel length:16506
+Number of spikes:13352
+The avg evaluation error is:0.006387552342020769
+Error Rate:0.0024431482994159105
+The entire loop took:788459.0
+Experimenting with signal number#22
+Size of the data set is: 313110
+cf:172.8973101753005 kernel length:16506
+Number of spikes:12662
+The avg evaluation error is:0.0019104014797398747
+Error Rate:0.0012567107775662085
+The entire loop took:692806.0
+Experimenting with signal number#23
+Size of the data set is: 115542
+cf:172.8973101753005 kernel length:16506
+Number of spikes:15594
+The avg evaluation error is:0.09242949629239076
+Error Rate:0.0017978842425197198
+The entire loop took:1102870.0
+Experimenting with signal number#24
+Size of the data set is: 197568
+cf:172.8973101753005 kernel length:16506
+Number of spikes:10233
+The avg evaluation error is:0.0018485574766467009
+Error Rate:0.0026950204832814776
+The entire loop took:436475.0
+Experimenting with signal number#25
+Size of the data set is: 429534
+cf:172.8973101753005 kernel length:16506
+Number of spikes:8657
+The avg evaluation error is:0.0022412492301352176
+Error Rate:0.011173865154500242
+The entire loop took:311290.0
+Experimenting with signal number#26
+Size of the data set is: 140238
+cf:172.8973101753005 kernel length:16506
+Number of spikes:17152
+The avg evaluation error is:0.012480654269236816
+Error Rate:4.0861568833818173E-4
+The entire loop took:1398800.0
+Experimenting with signal number#27
+Size of the data set is: 220500
+cf:172.8973101753005 kernel length:16506
+Number of spikes:14962
+The avg evaluation error is:0.017829695814995678
+Error Rate:0.0011773809345092415
+The entire loop took:991637.0
+Experimenting with signal number#28
+Size of the data set is: 620928
+cf:172.8973101753005 kernel length:16506
+Number of spikes:11577
+The avg evaluation error is:0.001713315727003004
+Error Rate:0.0022608215810816725
+The entire loop took:577197.0
+Experimenting with signal number#29
+Size of the data set is: 352800
+cf:172.8973101753005 kernel length:16506
+Number of spikes:14849
+The avg evaluation error is:3.4581058223705
+Error Rate:0.0010112990719827217
+The entire loop took:951360.0
+Experimenting with signal number#30
+Size of the data set is: 771750
+cf:172.8973101753005 kernel length:16506
+Number of spikes:15927
+The avg evaluation error is:0.7481918736291027
+Error Rate:0.0017210803583306083
+The entire loop took:1186272.0
+Experimenting with signal number#31
+Size of the data set is: 19404
+cf:172.8973101753005 kernel length:16506
+Number of spikes:17151
+The avg evaluation error is:0.8344873385315877
+Error Rate:2.68549233800496E-4
+The entire loop took:1433767.0
+Experimenting with signal number#32
+Size of the data set is: 33516
+cf:172.8973101753005 kernel length:16506
+Number of spikes:17848
+The avg evaluation error is:2.1105014582676147
+Error Rate:9.666146659881737E-5
+The entire loop took:1538037.0
+Experimenting with signal number#33
+Size of the data set is: 275184
+cf:172.8973101753005 kernel length:16506
+Number of spikes:15710
+The avg evaluation error is:0.022719803178080766
+Error Rate:0.0013069445406155534
+The entire loop took:1157028.0
+Experimenting with signal number#34
+Size of the data set is: 445410
+cf:172.8973101753005 kernel length:16506
+Number of spikes:12715
+The avg evaluation error is:0.002173268639063479
+Error Rate:0.001326773750130529
+The entire loop took:733942.0
+Experimenting with signal number#35
+Size of the data set is: 276066
+cf:172.8973101753005 kernel length:16506
+Number of spikes:8505
+The avg evaluation error is:0.002496484381792567
+Error Rate:0.010721238899348255
+The entire loop took:309922.0
+Experimenting with signal number#36
+Size of the data set is: 391608
+cf:172.8973101753005 kernel length:16506
+Number of spikes:12960
+The avg evaluation error is:0.005205159774123831
+Error Rate:0.0020442585452110553
+The entire loop took:703658.0
+Experimenting with signal number#37
+Size of the data set is: 642096
+cf:172.8973101753005 kernel length:16506
+Number of spikes:15322
+The avg evaluation error is:0.0020419527546978737
+Error Rate:4.28563658838091E-5
+The entire loop took:1038137.0
+Experimenting with signal number#38
+Size of the data set is: 783216
+cf:172.8973101753005 kernel length:16506
+Number of spikes:16933
+The avg evaluation error is:0.6902425054820568
+Error Rate:0.0010018235559099134
+The entire loop took:1346862.0
+Experimenting with signal number#39
+Size of the data set is: 242550
+cf:172.8973101753005 kernel length:16506
+Number of spikes:13230
+The avg evaluation error is:0.01567698721233731
+Error Rate:0.007459001682415616
+The entire loop took:750892.0
+Experimenting with signal number#40
+Size of the data set is: 799092
+cf:172.8973101753005 kernel length:16506
+Number of spikes:9184
+The avg evaluation error is:0.0022611665608650786
+Error Rate:0.009256457424367856
+The entire loop took:367936.0
+Experimenting with signal number#41
+Size of the data set is: 226674
+cf:172.8973101753005 kernel length:16506
+Number of spikes:12364
+The avg evaluation error is:0.0090875181168283
+Error Rate:0.009045041076789433
+The entire loop took:622956.0
+Experimenting with signal number#42
+Size of the data set is: 277830
+cf:172.8973101753005 kernel length:16506
+Number of spikes:8235
+The avg evaluation error is:0.002662598272488393
+Error Rate:0.014069960007919843
+The entire loop took:281851.0
+Experimenting with signal number#43
+Size of the data set is: 73206
+cf:172.8973101753005 kernel length:16506
+Number of spikes:11229
+The avg evaluation error is:0.0022268544868450663
+Error Rate:0.0048866169793699505
+The entire loop took:578185.0
+Experimenting with signal number#44
+Size of the data set is: 49392
+cf:172.8973101753005 kernel length:16506
+Number of spikes:16100
+The avg evaluation error is:0.0035041805249340155
+Error Rate:8.637259876079015E-5
+The entire loop took:1230293.0
+Experimenting with signal number#45
+Size of the data set is: 29106
+cf:172.8973101753005 kernel length:16506
+Number of spikes:17046
+The avg evaluation error is:0.046134155929119555
+Error Rate:9.97377304375921E-4
+The entire loop took:1399834.0
+Experimenting with signal number#46
+Size of the data set is: 74088
+cf:172.8973101753005 kernel length:16506
+Number of spikes:17377
+The avg evaluation error is:0.018147284953866524
+Error Rate:1.763688589096823E-4
+The entire loop took:1576498.0
+Experimenting with signal number#47
+Size of the data set is: 1075158
+cf:172.8973101753005 kernel length:16506
+Number of spikes:14670
+The avg evaluation error is:0.002051389171400942
+Error Rate:3.615317425598751E-4
+The entire loop took:1023654.0
+Experimenting with signal number#48
+Size of the data set is: 90846
+cf:172.8973101753005 kernel length:16506
+Number of spikes:14043
+The avg evaluation error is:0.02725557591957196
+Error Rate:0.005862462243540813
+The entire loop took:865460.0
+Experimenting with signal number#49
+Size of the data set is: 177282
+cf:172.8973101753005 kernel length:16506
+Number of spikes:17126
+The avg evaluation error is:0.037073153455441786
+Error Rate:6.359680506623969E-5
+The entire loop took:1485456.0
+Experimenting with signal number#50
+Size of the data set is: 89964
+cf:172.8973101753005 kernel length:16506
+Number of spikes:15463
+The avg evaluation error is:0.008715970999473865
+Error Rate:0.0012704388438280242
+The entire loop took:1097070.0
+Experimenting with signal number#51
+Size of the data set is: 82908
+cf:172.8973101753005 kernel length:16506
+Number of spikes:17130
+The avg evaluation error is:1.529814530168396
+Error Rate:9.943599116085781E-4
+The entire loop took:1512132.0
+Experimenting with signal number#52
+Size of the data set is: 204624
+cf:172.8973101753005 kernel length:16506
+Number of spikes:16854
+The avg evaluation error is:0.024618234981069746
+Error Rate:3.1476146583884183E-4
+The entire loop took:1467738.0
+Experimenting with signal number#53
+Size of the data set is: 36162
+cf:172.8973101753005 kernel length:16506
+Number of spikes:17742
+The avg evaluation error is:0.786353487547965
+Error Rate:0.003989599938205135
+The entire loop took:1653205.0
+Experimenting with signal number#54
+Size of the data set is: 1309770
+cf:172.8973101753005 kernel length:16506
+Number of spikes:14078
+The avg evaluation error is:0.0013268432234418964
+Error Rate:1.4637144002625915E-4
+The entire loop took:953041.0
+Experimenting with signal number#55
+Size of the data set is: 91728
+cf:172.8973101753005 kernel length:16506
+Number of spikes:15497
+The avg evaluation error is:0.018517413033245573
+Error Rate:7.902304095108897E-4
+The entire loop took:1106264.0
+Experimenting with signal number#56
+Size of the data set is: 37926
+cf:172.8973101753005 kernel length:16506
+Number of spikes:11721
+The avg evaluation error is:0.0019394150959225053
+Error Rate:0.0012884392338788403
+The entire loop took:560580.0
+Experimenting with signal number#57
+Size of the data set is: 217854
+cf:172.8973101753005 kernel length:16506
+Number of spikes:14690
+The avg evaluation error is:0.008817125593821683
+Error Rate:0.001037628698864829
+The entire loop took:984028.0
+Experimenting with signal number#58
+Size of the data set is: 381024
+cf:172.8973101753005 kernel length:16506
+Number of spikes:15949
+The avg evaluation error is:0.41934485710332514
+Error Rate:7.682138714168865E-5
+The entire loop took:1190790.0
+Experimenting with signal number#59
+Size of the data set is: 298998
+cf:172.8973101753005 kernel length:16506
+Number of spikes:12039
+The avg evaluation error is:0.003018443100477836
+Error Rate:0.003041775013299133
+The entire loop took:657119.0
+Experimenting with signal number#60
+Size of the data set is: 43218
+cf:172.8973101753005 kernel length:16506
+Number of spikes:15742
+The avg evaluation error is:0.007838087411562477
+Error Rate:9.306951881767406E-4
+The entire loop took:1149470.0
+Experimenting with signal number#61
+Size of the data set is: 134064
+cf:172.8973101753005 kernel length:16506
+Number of spikes:8870
+The avg evaluation error is:0.002418416380979139
+Error Rate:0.012458066371652806
+The entire loop took:317551.0
+Experimenting with signal number#62
+Size of the data set is: 91728
+cf:172.8973101753005 kernel length:16506
+Number of spikes:17123

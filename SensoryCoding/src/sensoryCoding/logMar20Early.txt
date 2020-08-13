@@ -1,0 +1,103 @@
+JUnit version 4.11
+II.Experimenting with signal number#1
+Size of the data set is: 617400
+Time for init:19695.0
+Number if spikes:25839
+So the avg evaluation error is:0.3068361152845851
+Error rate fast:3.169371288235649E-4
+Fast heuristic error with 500 spikes is: 0.3962849693243941
+Fast heuristic error with 1000 spikes is: 0.2594578293120203
+Fast heuristic error with 1500 spikes is: 0.1702877520277589
+Fast heuristic error with 2000 spikes is: 0.1177268962051141
+Fast heuristic error with 2500 spikes is: 0.08262796103784412
+Fast heuristic error with 3000 spikes is: 0.05608461041070465
+Fast heuristic error with 3500 spikes is: 0.037541780094359004
+Fast heuristic error with 4000 spikes is: 0.02670743308216682
+Fast heuristic error with 4500 spikes is: 0.01870228992983961
+Fast heuristic error with 5000 spikes is: 0.013852874737463822
+Fast heuristic error with 5500 spikes is: 0.01117358763107918
+Fast heuristic error with 6000 spikes is: 0.008959848880959178
+Fast heuristic error with 6500 spikes is: 0.0076779012266876044
+Fast heuristic error with 7000 spikes is: 0.006569400274320499
+Fast heuristic error with 7500 spikes is: 0.005542284548704894
+Fast heuristic error with 8000 spikes is: 0.004760490903895142
+Fast heuristic error with 8500 spikes is: 0.004223783161691719
+Fast heuristic error with 9000 spikes is: 0.00380032999939792
+Fast heuristic error with 9500 spikes is: 0.0034324902077510627
+Fast heuristic error with 10000 spikes is: 0.003028836467276223
+Fast heuristic error with 10500 spikes is: 0.002704182783034128
+Fast heuristic error with 11000 spikes is: 0.0022105632655500377
+Fast heuristic error with 11500 spikes is: 0.0018800549292201478
+Fast heuristic error with 12000 spikes is: 0.0015877107460229834
+Fast heuristic error with 12500 spikes is: 0.001413793731585913
+Fast heuristic error with 13000 spikes is: 0.0012515612617360172
+Fast heuristic error with 13500 spikes is: 0.0011288521046683615
+Fast heuristic error with 14000 spikes is: 0.0010111584655209357
+Fast heuristic error with 14500 spikes is: 9.228933171003173E-4
+Fast heuristic error with 15000 spikes is: 8.379275408499307E-4
+Fast heuristic error with 15500 spikes is: 7.714389890870034E-4
+Fast heuristic error with 16000 spikes is: 7.263645680044192E-4
+Fast heuristic error with 16500 spikes is: 6.862308368781119E-4
+Fast heuristic error with 17000 spikes is: 6.352732671294994E-4
+Fast heuristic error with 17500 spikes is: 5.967805669420961E-4
+Fast heuristic error with 18000 spikes is: 5.696944687307256E-4
+Fast heuristic error with 18500 spikes is: 5.400761911546053E-4
+Fast heuristic error with 19000 spikes is: 5.105827948850653E-4
+Fast heuristic error with 19500 spikes is: 4.8445795378588766E-4
+Fast heuristic error with 20000 spikes is: 4.619384120665794E-4
+Fast heuristic error with 20500 spikes is: 4.392251986711174E-4
+Fast heuristic error with 21000 spikes is: 4.189537494792113E-4
+Fast heuristic error with 21500 spikes is: 3.9900429055630965E-4
+Fast heuristic error with 22000 spikes is: 3.8017729456288135E-4
+Fast heuristic error with 22500 spikes is: 3.5859558816397295E-4
+Fast heuristic error with 23000 spikes is: 3.4509265388548484E-4
+Fast heuristic error with 23500 spikes is: 3.321282777947568E-4
+Fast heuristic error with 24000 spikes is: 3.2412781520226844E-4
+Fast heuristic error with 24500 spikes is: 3.1956196211885664E-4
+Fast heuristic error with 25000 spikes is: 3.1767481659096205E-4
+Fast heuristic error with 25500 spikes is: 3.178000279703815E-4
+Time for applying flat compression:3.846142E7
+End of reconstruction
+Experimenting with signal number#2
+Size of the data set is: 455112
+Time for init:16455.0
+Number if spikes:20177
+So the avg evaluation error is:0.004173380017631559
+Error rate fast:1.2659478511748597E-4
+Fast heuristic error with 500 spikes is: 0.08739269427497054
+Fast heuristic error with 1000 spikes is: 0.03562654910463835
+Fast heuristic error with 1500 spikes is: 0.014464575877530146
+Fast heuristic error with 2000 spikes is: 0.006897980146910879
+Fast heuristic error with 2500 spikes is: 0.0051015307932105545
+Fast heuristic error with 3000 spikes is: 0.004017319568598633
+Fast heuristic error with 3500 spikes is: 0.0034127296075744246
+Fast heuristic error with 4000 spikes is: 0.0028516955012711223
+Fast heuristic error with 4500 spikes is: 0.0016156973654134728
+Fast heuristic error with 5000 spikes is: 0.001289244456563847
+Fast heuristic error with 5500 spikes is: 0.001124486780578601
+Fast heuristic error with 6000 spikes is: 9.432743052665905E-4
+Fast heuristic error with 6500 spikes is: 8.182727234085494E-4
+Fast heuristic error with 7000 spikes is: 7.459610753500968E-4
+Fast heuristic error with 7500 spikes is: 6.410224922288188E-4
+Fast heuristic error with 8000 spikes is: 5.60681317852543E-4
+Fast heuristic error with 8500 spikes is: 5.004633840986903E-4
+Fast heuristic error with 9000 spikes is: 4.459869260080782E-4
+Fast heuristic error with 9500 spikes is: 3.8826830413415627E-4
+Fast heuristic error with 10000 spikes is: 3.4810852441143807E-4
+Fast heuristic error with 10500 spikes is: 3.2884839997734564E-4
+Fast heuristic error with 11000 spikes is: 2.955226981472547E-4
+Fast heuristic error with 11500 spikes is: 2.6707668489228E-4
+Fast heuristic error with 12000 spikes is: 2.536578260238124E-4
+Fast heuristic error with 12500 spikes is: 2.3187692683006975E-4
+Fast heuristic error with 13000 spikes is: 2.114210694758054E-4
+Fast heuristic error with 13500 spikes is: 2.050120692701313E-4
+Fast heuristic error with 14000 spikes is: 1.9646016485485026E-4
+Fast heuristic error with 14500 spikes is: 1.8480769045865322E-4
+Fast heuristic error with 15000 spikes is: 1.773177345071046E-4
+Fast heuristic error with 15500 spikes is: 1.6921971369004106E-4
+Fast heuristic error with 16000 spikes is: 1.5565600548542543E-4
+Fast heuristic error with 16500 spikes is: 1.5444269332207168E-4
+Fast heuristic error with 17000 spikes is: 1.5105441889157986E-4
+Fast heuristic error with 17500 spikes is: 1.4440753630970445E-4
+Fast heuristic error with 18000 spikes is: 1.4109107702196022E-4
+Fast heuristic error with 18500 spikes is: 1.352133618525582E-4
