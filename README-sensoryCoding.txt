@@ -49,6 +49,6 @@ Please Note: Some of the operations are memory intensive and hence it recommende
 
 ### Break down into end to end tests
 
-
+The test classes are well documented and are all kept under the "test" package. The test classes include separate integration tests on most of the functionalities covered in the project. The tests that report accuracy on large dataset are kept in the class named "DriverTest.java"  
 
 We used git for version control.
